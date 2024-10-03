@@ -1,0 +1,14 @@
+[
+    {
+        "title": "Spaghetti Carbonara",
+        "ingredients": ["spaghetti", "eggs", "parmesan cheese", "bacon"],
+        "image": "path_to_image",
+        "url": "recipe_url"
+    },
+    {
+        "title": "Chicken Salad",
+        "ingredients": ["chicken", "lettuce", "tomatoes", "cucumbers"],
+        "image": "path_to_image",
+        "url": "recipe_url"
+    }
+]

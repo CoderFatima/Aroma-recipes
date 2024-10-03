@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI and Caloric Needs Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #4facfe;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #00f2fe;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .underweight {
+            background-color: #ffcccb;
+        }
+        .normal {
+            background-color: #c8e6c9;
+        }
+        .overweight {
+            background-color: #ffecb3;
+        }
+        .obese {
+            background-color: #ffcdd2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>BMI and Caloric Needs Calculator</h1>
+        <div class="form-group">
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" name="height">
+        </div>
+        <div class="form-group">
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" name="weight">
+        </div>
+        <div class="form-group">
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age">
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="activity">Activity Level:</label>
+            <select id="activity" name="activity">
+                <option value="sedentary">Sedentary</option>
+                <option value="light">Lightly active</option>
+                <option value="moderate">Moderately active</option>
+                <option value="active">Active</option>
+                <option value="very-active">Very active</option>
+            </select>
+        </div>
+        <button id="calculate">Calculate BMI</button>
+        <button id="calculate-calories">Calculate Calories</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        function calculateBMI() {
+            const height = parseFloat(document.getElementById('height').value) / 100;
+            const weight = parseFloat(document.getElementById('weight').value);
+
+            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                document.getElementById('result').textContent = 'Please enter valid values for height and weight.';
+                document.getElementById('result').className = '';
+                return;
+            }
+
+            const bmi = weight / (height * height);
+            let category = '';
+            let className = '';
+
+            if (bmi < 18.5) {
+                category = 'Underweight';
+                className = 'underweight';
+            } else if (bmi < 24.9) {
+                category = 'Normal weight';
+                className = 'normal';
+            } else if (bmi < 29.9) {
+                category = 'Overweight';
+                className = 'overweight';
+            } else {
+                category = 'Obese';
+                className = 'obese';
+            }
+
+            document.getElementById('result').textContent = `Your BMI is ${bmi.toFixed(2)} (${category}).`;
+            document.getElementById('result').className = className;
+        }
+
+        function calculateCalories() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const activity = document.getElementById('activity').value;
+
+            if (isNaN(weight) || isNaN(height) || isNaN(age) || weight <= 0 || height <= 0 || age <= 0) {
+                document.getElementById('result').textContent = 'Please enter valid values for weight, height, and age.';
+                document.getElementById('result').className = '';
+                return;
+            }
+
+            let bmr;
+
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+
+            let caloricNeeds;
+
+            switch (activity) {
+                case 'sedentary':
+                    caloricNeeds = bmr * 1.2;
+                    break;
+                case 'light':
+                    caloricNeeds = bmr * 1.375;
+                    break;
+                case 'moderate':
+                    caloricNeeds = bmr * 1.55;
+                    break;
+                case 'active':
+                    caloricNeeds = bmr * 1.725;
+                    break;
+                case 'very-active':
+                    caloricNeeds = bmr * 1.9;
+                    break;
+                default:
+                    caloricNeeds = bmr;
+            }
+
+            document.getElementById('result').textContent = `Your daily caloric needs are ${caloricNeeds.toFixed(2)} calories.`;
+            document.getElementById('result').className = '';
+        }
+
+        document.getElementById('calculate').addEventListener('click', calculateBMI);
+        document.getElementById('calculate-calories').addEventListener('click', calculateCalories);
+    </script>
+</body>
+</html>
